@@ -70,15 +70,23 @@ def handle_dialog(res, req):
                 'text'] = 'Приятно познакомиться, ' \
                           + first_name.title() \
                           + '. Я - Алиса. Угадай что за город'
+
             num = random.choice(("моксва", "париж", "нью-йорк"))
+            res['response']['card'] = {}
+            res['response']['card']['type'] = 'BigImage'
             res['response']['card']['image_id'] = random.choice(cities[num])
-            city = get_city(req)
-            if cities[city] == cities[num]:
-                res['response']['text'] = 'Вы угадали!'
+            res['response']['text'] = 'Узнали?'
+
+            res['response']['buttons'] = [
+                {
+                    'title': city.title(),
+                    'hide': True
+                } for city in cities
+            ]
     # если мы знакомы с пользователем и он нам что-то написал,
     # то это говорит о том, что он уже говорит о городе,
     # что хочет увидеть.
-    '''else:
+    else:
         # ищем город в сообщение от пользователя
         city = get_city(req)
         # если этот город среди известных нам,
@@ -93,7 +101,7 @@ def handle_dialog(res, req):
         # 'Первый раз слышу об этом городе.'
         else:
             res['response']['text'] = \
-                'Первый раз слышу об этом городе. Попробуй еще разок!'''''
+                'Первый раз слышу об этом городе. Попробуй еще разок!'
 
 
 def get_city(req):
