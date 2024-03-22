@@ -42,7 +42,7 @@ def main():
 
 def handle_dialog(res, req):
     user_id = req['session']['user_id']
-
+    num = random.choice(("моксва", "париж", "нью-йорк"))
     # если пользователь новый, то просим его представиться.
     if req['session']['new']:
         res['response']['text'] = 'Привет! Назови свое имя!'
@@ -71,11 +71,10 @@ def handle_dialog(res, req):
                           + first_name.title() \
                           + '. Я - Алиса. Угадай что за город'
 
-            num = random.choice(("моксва", "париж", "нью-йорк"))
             res['response']['card'] = {}
             res['response']['card']['type'] = 'BigImage'
+            res['response']['card']['title'] = 'Узнали?'
             res['response']['card']['image_id'] = random.choice(cities[num])
-            res['response']['text'] = 'Узнали?'
 
             res['response']['buttons'] = [
                 {
@@ -87,21 +86,12 @@ def handle_dialog(res, req):
     # то это говорит о том, что он уже говорит о городе,
     # что хочет увидеть.
     else:
-        # ищем город в сообщение от пользователя
         city = get_city(req)
-        # если этот город среди известных нам,
-        # то показываем его (выбираем одну из двух картинок случайно)
-        if city in cities:
-            res['response']['card'] = {}
-            res['response']['card']['type'] = 'BigImage'
-            res['response']['card']['title'] = 'Этот город я знаю.'
-            res['response']['card']['image_id'] = random.choice(cities[city])
-            res['response']['text'] = 'Я угадал!'
-        # если не нашел, то отвечает пользователю
-        # 'Первый раз слышу об этом городе.'
+        if cities[city] == num:
+            res['response']['text'] = "Вы угадали"
         else:
             res['response']['text'] = \
-                'Первый раз слышу об этом городе. Попробуй еще разок!'
+                'Вы не угадали!'
 
 
 def get_city(req):
