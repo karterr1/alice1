@@ -70,7 +70,7 @@ def handle_dialog(res, req):
                 'text'] = 'Приятно познакомиться, ' \
                           + first_name.title() \
                           + '. Я - Алиса. Угадай что за город'
-            num = random.choice((0, 1, 2))
+            num = random.choice(("моксва", "париж", "нью-йорк"))
             res['response']['card']['image_id'] = random.choice(cities[num])
             city = get_city(req)
             if cities[city] == cities[num]:
